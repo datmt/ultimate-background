@@ -44,8 +44,8 @@
      */
     function perfectDimensions(element, options)
     {
-        var width = element.width();
-        var height = element.height();
+        var width = element.outerWidth();
+        var height = element.outerHeight();
 
         console.log('viewport height: ' + $(window.top).height());
 
@@ -126,6 +126,8 @@
     $.fn.c47bg = function(options)
     {
         var element = this;
+
+        element.css('position', 'relative');
         var defaults = {
             ratio: 16/9, // usually either 4/3 or 16/9 -- tweak as needed
             mute: true,
@@ -141,7 +143,7 @@
          * Remove margin, padding of the body and HTML IF container is body. Otherwise, if
          * the container is div, removing padding and margin for body and html may cause conflicts
          */
-         console.log('tag name: ', this.prop('tagName'));
+        console.log('tag name: ', this.prop('tagName'));
         if (this.prop('tagName').toLowerCase === "body")
         {
             console.log('removing padding and margin in body and html');
@@ -189,10 +191,8 @@
             var videoPosition = options.container=='body' ?'fixed;' : 'absolute';
 
             videoContainer =
-                '<div style="position: relative; top: 0; left: 0; z-index: -9999; ">'+
-                '<div style="position: absolute; top: 0; left: 0; overflow: hidden;" class="'+outerDivClass+'">' +
+                '<div style="position: absolute; top: 0; left: 0; overflow: hidden; z-index: -1;" class="'+outerDivClass+'">' +
                 '<div style="-webkit-backface-visibility: hidden; backface-visibility: hidden;position:'+videoPosition+';" id="'+randomID+'" ></div>' +
-                '</div>'+
                 '</div>';
             element.prepend(videoContainer);
 
@@ -261,11 +261,11 @@
                 throw new C47Exception('Please provide at least one video source');
 
             var videoContainer =
-                '<div style="position: relative;z-index: -9999; overflow: hidden;" class="'+outerDivClass+'">' +
-                '<video autoplay="1" loop="1" muted="1" id="'+randomID+'" height="'+height+'" width="'+width+'" poster="'+poster+'" >'+
+                '<div class="'+outerDivClass+'" style="z-index: -1; position: absolute; top: 0; left: 0; overflow: hidden;">'+
+                '<video  autoplay="1" loop="1" muted="1" id="'+randomID+'" height="'+height+'" width="'+width+'" poster="'+poster+'" >'+
                 mp4Source + ogvSource + webmSource +
                 'Your browser doesn\'t support HTML5 video tag.'+
-                '</video>' +
+                '</video>'+
                 '</div>';
 
             element.prepend(videoContainer);
@@ -273,10 +273,8 @@
         {
             var position = options.container == "body" ? "fixed" : "absolute";
             var imageContainer =
-                '<div style="position: relative; top: 0; left: 0; z-index: 0;">'+
-                '<div style="position: absolute; top: 0; left: 0; z-index: -9999;" class="'+outerDivClass+'">' +
+                '<div style="position: absolute; top: 0; left: 0; z-index: -1;" class="'+outerDivClass+'">' +
                 '<img style="position: '+position+'; top: 0; left: 0;" id="'+randomID+'" src="'+options.source+'" />' +
-                '</div>'+
                 '</div>';
 
             element.prepend(imageContainer);
